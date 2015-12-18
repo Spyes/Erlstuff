@@ -98,3 +98,46 @@ lenient_zip(_, []) ->
 lenient_zip([X|Xs], [Y|Ys]) ->
     [{X,Y}|lenient_zip(Xs, Ys)].
 
+
+tail_zip(Xs, Ys) ->
+    lists:reverse(tail_zip(Xs, Ys, [])).
+
+tail_zip([], _, Res) ->
+    Res;
+tail_zip(_,[], Res) ->
+    Res;
+tail_zip([X|Xs], [Y|Ys], Res) ->
+    tail_zip(Xs, Ys, [{X,Y}|Res]).
+
+
+quicksort([]) ->
+    [];
+quicksort([Pivot|Rest]) ->
+    {Smaller, Larger} = partition(Pivot, Rest, [], []),
+    quicksort(Smaller) ++ [Pivot] ++ quicksort(Larger).
+
+partition(_, [], Smaller, Larger) ->
+    {Smaller, Larger};
+partition(Pivot, [H|T], Smaller, Larger) ->
+    if H =< Pivot ->
+	    partition(Pivot, T, [H|Smaller], Larger);
+       H > Pivot ->
+	    partition(Pivot, T, Smaller, [H|Larger])
+    end.
+
+lc_quicksort([]) ->
+    [];
+lc_quicksort([Pivot|Rest]) ->
+    lc_quicksort([Smaller || Smaller <- Rest,
+			     Smaller =< Pivot])
+	++ [Pivot] ++
+	lc_quicksort([Larger || Larger <- Rest,
+				Larger > Pivot]).
+
+tail_fib(N) ->
+    tail_fib(N, 1).
+
+tail_fib(N, Acc) when N == 0 ->
+    Acc;
+tail_fib(N, Acc) ->
+    tail_fib(N - 1, Acc * N).
